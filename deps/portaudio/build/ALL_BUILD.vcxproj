@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{666B7957-247A-3722-9BA8-B1603CF85327}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Kalle\Desktop\Terra\deps\portaudio\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/Kalle/Desktop/Terra/deps/portaudio/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Kalle/Desktop/Terra/deps/portaudio -BC:/Users/Kalle/Desktop/Terra/deps/portaudio/build --check-stamp-file C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\TestBigEndian.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCXXCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeRCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeSystem.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindASIOSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindDXSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\options_cmake.h.in;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\template_portaudio.def;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/Kalle/Desktop/Terra/deps/portaudio/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Kalle/Desktop/Terra/deps/portaudio -BC:/Users/Kalle/Desktop/Terra/deps/portaudio/build --check-stamp-file C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\TestBigEndian.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCXXCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeRCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeSystem.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindASIOSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindDXSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\options_cmake.h.in;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\template_portaudio.def;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/Kalle/Desktop/Terra/deps/portaudio/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Kalle/Desktop/Terra/deps/portaudio -BC:/Users/Kalle/Desktop/Terra/deps/portaudio/build --check-stamp-file C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\TestBigEndian.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCXXCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeRCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeSystem.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindASIOSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindDXSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\options_cmake.h.in;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\template_portaudio.def;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/Kalle/Desktop/Terra/deps/portaudio/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Kalle/Desktop/Terra/deps/portaudio -BC:/Users/Kalle/Desktop/Terra/deps/portaudio/build --check-stamp-file C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.16\Modules\TestBigEndian.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeCXXCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeRCCompiler.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\3.16.4\CMakeSystem.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindASIOSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\FindDXSDK.cmake;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\options_cmake.h.in;C:\Users\Kalle\Desktop\Terra\deps\portaudio\cmake_support\template_portaudio.def;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\ZERO_CHECK.vcxproj">
+      <Project>{093B69DF-B624-3CD3-BDA3-D21DB3107A4C}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\portaudio.vcxproj">
+      <Project>{5DF9D761-9AC8-3933-ACFB-4271870FEFCC}</Project>
+      <Name>portaudio</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\portaudio_static.vcxproj">
+      <Project>{5CE63275-056F-3A75-9A53-E28FFFB82B89}</Project>
+      <Name>portaudio_static</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

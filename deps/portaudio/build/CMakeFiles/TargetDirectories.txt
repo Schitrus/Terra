@@ -1,0 +1,4 @@
+C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/portaudio.dir
+C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/portaudio_static.dir
+C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/CMakeFiles/ZERO_CHECK.dir

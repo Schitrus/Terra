@@ -1,0 +1,10 @@
+^C:\USERS\KALLE\DESKTOP\TERRA\DEPS\PORTAUDIO\BUILD\CMAKEFILES\D1B64F5118F1FD396E312AF6A596E4BE\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Kalle/Desktop/Terra/deps/portaudio -BC:/Users/Kalle/Desktop/Terra/deps/portaudio/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Kalle/Desktop/Terra/deps/portaudio/build/portaudio.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

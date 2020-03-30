@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Kalle\Desktop\Terra\deps\portaudio\build\CMakeFiles\d1b64f5118f1fd396e312af6a596e4be\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{C99B2F7E-84A2-3A9A-BADE-FD986D0E5CAB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
