@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{49b04d28-00e0-4a6d-9e5c-c1ca3ce7d924}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -21,5 +24,42 @@
     <ClCompile Include="src\Terra.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\terrain.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\terrain.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\terrain.geom">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\terrain.tesc">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\terrain.tese">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\noise.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\noise.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,2 +1,30 @@
-﻿  Terra.cpp
-C:\Users\Kalle\Desktop\Terra\Terra.cpp(4,10): fatal error C1083: Cannot open include file: 'GLFW/glfw3.h': No such file or directory
+﻿  glad.c
+  Terra.cpp
+Terra.obj : error LNK2019: unresolved external symbol glfwInit referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwWindowHint referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwDestroyWindow referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwSetWindowShouldClose referenced in function "void __cdecl key_callback(struct GLFWwindow *,int,int,int,int)" (?key_callback@@YAXPEAUGLFWwindow@@HHHH@Z)
+Terra.obj : error LNK2019: unresolved external symbol glfwSetFramebufferSizeCallback referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwGetKey referenced in function "void __cdecl processInput(struct GLFWwindow *)" (?processInput@@YAXPEAUGLFWwindow@@@Z)
+Terra.obj : error LNK2019: unresolved external symbol glfwSetKeyCallback referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwSwapInterval referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol glfwGetProcAddress referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol "public: void __cdecl Audio::init(void)" (?init@Audio@@QEAAXXZ) referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol "public: int __cdecl Audio::load(char const *)" (?load@Audio@@QEAAHPEBD@Z) referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol "public: void __cdecl Audio::play(int)" (?play@Audio@@QEAAXH@Z) referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol "public: void __cdecl Audio::pause(void)" (?pause@Audio@@QEAAXXZ) referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol "public: bool __cdecl Audio::isDone(void)" (?isDone@Audio@@QEAA_NXZ) referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol "public: void __cdecl Audio::restart(void)" (?restart@Audio@@QEAAXXZ) referenced in function SDL_main
+Terra.obj : error LNK2019: unresolved external symbol "public: __cdecl Audio::~Audio(void)" (??1Audio@@QEAA@XZ) referenced in function "public: void * __cdecl Audio::`scalar deleting destructor'(unsigned int)" (??_GAudio@@QEAAPEAXI@Z)
+MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\Users\Kalle\Desktop\Terra\lib\SDL2.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Kalle\Desktop\Terra\lib\SDL2main.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Kalle\Desktop\Terra\lib\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Kalle\Desktop\Terra\Terra.exe : fatal error LNK1120: 24 unresolved externals

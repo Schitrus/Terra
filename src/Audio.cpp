@@ -70,7 +70,7 @@ void Audio::restart() {
 Audio::~Audio() {
 	SDL_CloseAudio();
 
-	SDL_FreeWAV(audio_pos);
+	SDL_FreeWAV(wav_buffer);
 
 	SDL_Quit();
 }
