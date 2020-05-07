@@ -1,6 +1,9 @@
 #include <iostream>
 #include <conio.h>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
+#include <utility>
 
 #include "GLAD/glad.h"
 #include "GLFW/glfw3.h"
@@ -15,10 +18,34 @@
 
 using namespace glm;
 
+bool inc_freq = false;
+bool dec_freq = false;
+
+bool w_key = false;
+bool s_key = false;
+bool a_key = false;
+bool d_key = false;
+
+void press(int key_type, int key, int action, bool &isPressed) {
+	if (key == key_type && action == GLFW_PRESS)
+		isPressed = true;
+	if (key == key_type && action == GLFW_RELEASE)
+		isPressed = false;
+}
+
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+	press(GLFW_KEY_UP, key, action, inc_freq);
+	press(GLFW_KEY_DOWN, key, action, dec_freq);
+
+	press(GLFW_KEY_W, key, action, w_key);
+	press(GLFW_KEY_S, key, action, s_key);
+	press(GLFW_KEY_A, key, action, a_key);
+	press(GLFW_KEY_D, key, action, d_key);
+
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -38,13 +65,13 @@ vec2 quad_vertices[] = { { 1.0f, 1.0f}, {1.0f,-1.0f}, {-1.0f,-1.0f}, {-1.0f,1.0f
 vec2 quad_uv[] = { {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}, {0.0f, 1.0f} };
 unsigned int quad_indices[] = { 0, 1, 3, 1, 2, 3 };
 
-vec3 plane_vertices[] = { {-1.0f, 0.0f, -1.0f}, {-1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 1.0f}, {1.0f, 0.0f,-1.0f} };
+vec3 plane_vertices[] = { {-1.0f, 0.0f, -1.0f}, {1.0f, 0.0f,-1.0f}, {-1.0f, 0.0f, 1.0f}, { 1.0f, 0.0f,1.0f} };
 unsigned int plane_indices[] = { 0, 1, 2, 3 };
 
 Shader terrain_shader;
 Shader noise_shader;
 
-unsigned int terrain_length = 256;
+unsigned int terrain_length = 4096;
 
 unsigned int window_width = 1280;
 unsigned int window_height = 720;
@@ -134,9 +161,9 @@ int main(int argc, char** argv) {
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
-	GLuint terrain_texture;
-	glGenTextures(1, &terrain_texture);
-	glBindTexture(GL_TEXTURE_2D, terrain_texture);
+	GLuint terrain_texture[2];
+	glGenTextures(2, terrain_texture);
+	glBindTexture(GL_TEXTURE_2D, terrain_texture[0]);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -144,25 +171,74 @@ int main(int argc, char** argv) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, terrain_length, terrain_length, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, terrain_length, terrain_length, 0, GL_RED, GL_FLOAT, nullptr);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, terrain_texture, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, terrain_texture[0], 0);
+
+	glBindTexture(GL_TEXTURE_2D, terrain_texture[1]);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, terrain_length, terrain_length, 0, GL_RED, GL_FLOAT, nullptr);
+
+	GLuint gradient_texture;
+	glGenTextures(1, &gradient_texture);
+	glBindTexture(GL_TEXTURE_2D, gradient_texture);
+	
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	GLuint gradient_length = 1024;
+	vec2* gradients = new vec2[gradient_length];
+
+	srand(time(nullptr));
+
+	ivec2 seed = ivec2(rand(), rand());
+
+	srand(seed.x);
+
+#define PI 3.14159265359
+
+	for (int i = 0; i < gradient_length; i++) {
+		float angle = radians(float(rand()%36000)/100.0);
+		gradients[i] = vec2(sin(angle), cos(angle));
+	}
+
+	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, gradient_length, 0, GL_RG, GL_FLOAT, gradients);
+
 
 	Audio* music = new Audio();
 	music->init();
 	music->load("res/music.wav");
 
-	music->play(2);
+	//music->play(2);
 
 	glPatchParameteri(GL_PATCH_VERTICES, 4);
 
+	GLfloat freq = 1.5;
+
+	double dt = glfwGetTime();
+	double time = glfwGetTime();
+
+	vec2 position(0.0f, 0.0f);
+
 	while (!glfwWindowShouldClose(window)) {
-		double time = glfwGetTime();
+		dt = glfwGetTime() - time;
+		time = glfwGetTime();
 		processInput(window);
 		if (music->isDone())
 			music->restart();
 
-		vec3 pos = vec3(2*cos(glfwGetTime()), 2, 2*sin(glfwGetTime()));
+		vec3 light_position = vec3(2 * sin(glfwGetTime()), 2, 2 * cos(glfwGetTime()));
+
+		vec3 pos = vec3(0, 1.1, 0.1);
 		mat4 model(1.0f);
 		mat4 view = lookAt(pos, vec3(0.0f), vec3(0, 1, 0));
 		mat4 proj = perspective(radians(90.0f), (float)window_width / window_height, 0.1f, 100.0f);
@@ -177,16 +253,52 @@ int main(int argc, char** argv) {
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		
 		
 		noise_shader.use();
 
-		glBindVertexArray(quad_VAO);
-		
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		if (inc_freq)
+			freq *= 1.0 + dt;
+		if (dec_freq)
+			freq *= 1.0 - dt;
+		if (w_key)
+			position.y -= dt;
+		if (s_key)
+			position.y += dt;
+		if (a_key)
+			position.x -= dt;
+		if (d_key)
+			position.x += dt;
 
-		
+		glUniform2iv(glGetUniformLocation(noise_shader.getProgram(), "seed"), 0, &seed[0]);
+
+		glBindVertexArray(quad_VAO);
+
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		for (int i = 0; i < 6; i++) {
+
+			swap(terrain_texture[0], terrain_texture[1]);
+
+			glBindTexture(GL_TEXTURE_2D, terrain_texture[0]);
+
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, terrain_texture[0], 0);
+
+			glUniform1f(glGetUniformLocation(noise_shader.getProgram(), "freq"), pow(2, i));
+			glUniform2fv(glGetUniformLocation(noise_shader.getProgram(), "offset"), 1, &position[0]);
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, terrain_texture[1]);
+
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_1D, gradient_texture);
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+			
+			
+		}
 
 		// DRAW TERRAIN
 
@@ -204,10 +316,14 @@ int main(int argc, char** argv) {
 		terrain_shader.use();
 
 		glUniformMatrix4fv(glGetUniformLocation(terrain_shader.getProgram(), "MVP"), 1, GL_FALSE, &MVP[0][0]);
+		glUniform3fv(glGetUniformLocation(terrain_shader.getProgram(), "light_position"), 1, &light_position[0]);
+		glUniform3fv(glGetUniformLocation(terrain_shader.getProgram(), "view_position"), 1, &pos[0]);
+		glUniform1f(glGetUniformLocation(terrain_shader.getProgram(), "res"), 128);
 
 		glBindVertexArray(terrain_VAO);
 
-		glBindTexture(GL_TEXTURE_2D, terrain_texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, terrain_texture[0]);
 
 		glDrawElements(GL_PATCHES, 4, GL_UNSIGNED_INT, 0);
 
