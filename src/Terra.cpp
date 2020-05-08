@@ -236,7 +236,7 @@ int main(int argc, char** argv) {
 		if (music->isDone())
 			music->restart();
 
-		vec3 light_position = vec3(2 * sin(glfwGetTime()), 2, 2 * cos(glfwGetTime()));
+		vec3 light_position = vec3(10000 * sin(0.25 * glfwGetTime()), 5000, 10000 * cos(0.25 * glfwGetTime()));
 
 		vec3 pos = vec3(0, 1.1, 0.1);
 		mat4 model(1.0f);
