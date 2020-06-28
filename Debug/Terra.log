@@ -1,32 +1,20 @@
 ﻿  Terra.cpp
-X:\OneDrive\Terra\src\Terra.cpp(201,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-X:\OneDrive\Terra\src\Terra.cpp(209,20): warning C4018: '<': signed/unsigned mismatch
-X:\OneDrive\Terra\src\Terra.cpp(210,15): warning C4244: 'initializing': conversion from 'genType' to 'float', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(164,71): warning C4244: 'argument': conversion from 'unsigned int' to 'GLfloat', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(179,75): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(460,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(466,20): warning C4018: '<': signed/unsigned mismatch
+X:\OneDrive\Terra\src\Terra.cpp(467,15): warning C4244: 'initializing': conversion from 'genType' to 'float', possible loss of data
           with
           [
               genType=double
           ]
-X:\OneDrive\Terra\src\Terra.cpp(261,20): warning C4244: '*=': conversion from 'double' to 'GLfloat', possible loss of data
-X:\OneDrive\Terra\src\Terra.cpp(263,20): warning C4244: '*=': conversion from 'double' to 'GLfloat', possible loss of data
-X:\OneDrive\Terra\src\Terra.cpp(265,20): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(493,30): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(521,24): warning C4244: 'initializing': conversion from 'genType' to 'float', possible loss of data
           with
           [
-              T=float
+              genType=double
           ]
-X:\OneDrive\Terra\src\Terra.cpp(267,20): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-X:\OneDrive\Terra\src\Terra.cpp(269,20): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-X:\OneDrive\Terra\src\Terra.cpp(271,20): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-X:\OneDrive\Terra\src\Terra.cpp(288,76): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(560,20): warning C4244: '*=': conversion from 'double' to 'GLfloat', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(562,20): warning C4244: '*=': conversion from 'double' to 'GLfloat', possible loss of data
+X:\OneDrive\Terra\src\Terra.cpp(581,87): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Terra.vcxproj -> X:\OneDrive\Terra\Terra.exe

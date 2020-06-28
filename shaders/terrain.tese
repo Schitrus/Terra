@@ -6,15 +6,21 @@ uniform mat4 MVP;
 
 uniform float res;
 
-uniform sampler2D noise;
+uniform mat4 modelViewMatrix;
+
+uniform mat4 lightMatrix;
+
+layout(binding = 0) uniform sampler2D noise;
 
 in vec2 teseUV[];
 
 out vec2 fragUV;
 
-out vec3 normal;
+out vec3 normal_vector;
 
-out vec3 fragPos;
+out vec3 fragment_position;
+
+out vec4 shadowMapCoord;
 
 out float h;
 
@@ -28,35 +34,39 @@ void main(){
 					  mix(teseUV[2], teseUV[3], gl_TessCoord.x),
 					                            gl_TessCoord.y);
 
-	float dt = 1.0/res;
 
-	vec2 p0 = gl_TessCoord.xy;
-	vec2 p1 = gl_TessCoord.xy + vec2(dt,0);
-	vec2 p2 = gl_TessCoord.xy + vec2(0,dt);
-	vec2 p3 = gl_TessCoord.xy + vec2(-dt,0);
-	vec2 p4 = gl_TessCoord.xy + vec2(0,-dt);
 
-	vec3 v0 = vec3(p0.x, texture(noise, p0).x, p0.y);
-	vec3 v1 = vec3(p1.x, texture(noise, p1).x, p1.y) - v0;
-	vec3 v2 = vec3(p2.x, texture(noise, p2).x, p2.y) - v0;
-	vec3 v3 = vec3(p3.x, texture(noise, p3).x, p3.y) - v0;
-	vec3 v4 = vec3(p4.x, texture(noise, p4).x, p4.y) - v0;
+	float terrain_length = res + 1;
 
-	vec3 n1 = normalize(cross(v1, v2));
-	vec3 n2 = normalize(cross(v2, v3));
-	vec3 n3 = normalize(cross(v3, v4));
-	vec3 n4 = normalize(cross(v4, v1));
+	vec2 p0 = ivec2(gl_TessCoord.xy * terrain_length + vec2(0,0)  + vec2(1,1)) / (terrain_length + 2);
+	vec2 p1 = ivec2(gl_TessCoord.xy * terrain_length + vec2(1,0)  + vec2(1,1)) / (terrain_length + 2);
+	vec2 p2 = ivec2(gl_TessCoord.xy * terrain_length + vec2(0,1)  + vec2(1,1)) / (terrain_length + 2);
+	vec2 p3 = ivec2(gl_TessCoord.xy * terrain_length + vec2(-1,0) + vec2(1,1)) / (terrain_length + 2);
+	vec2 p4 = ivec2(gl_TessCoord.xy * terrain_length + vec2(0,-1) + vec2(1,1)) / (terrain_length + 2);
 
-	normal = -normalize(n1 + n2 + n3 + n4);
+	vec3 center_point = vec3(p0.x, texture(noise, p0, 0).x, p0.y);
+	vec3 v1 = normalize(vec3(p1.x, texture(noise, p1, 0).x, p1.y) - center_point);
+	vec3 v2 = normalize(vec3(p2.x, texture(noise, p2, 0).x, p2.y) - center_point);
+	vec3 v3 = normalize(vec3(p3.x, texture(noise, p3, 0).x, p3.y) - center_point);
+	vec3 v4 = normalize(vec3(p4.x, texture(noise, p4, 0).x, p4.y) - center_point);
 
-	float height = texture(noise, p0).x;
+	vec3 n1 = normalize(cross(v2, v1));
+	vec3 n2 = normalize(cross(v3, v2));
+	vec3 n3 = normalize(cross(v4, v3));
+	vec3 n4 = normalize(cross(v1, v4));
+
+	normal_vector = normalize(n1 + n2 + n3 + n4);
+
+	float height = texture(noise, p0, 0).x;
 
 	h = height;
 	
 
 	pos = vec4(pos.x, height, pos.z, 1.0f);
 
-	fragPos = vec3(pos);
+	fragment_position = vec3(pos);
+
+	shadowMapCoord = lightMatrix * modelViewMatrix * pos;
 
 	gl_Position = MVP * pos; 
 }

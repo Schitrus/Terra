@@ -30,12 +30,18 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,6 +65,15 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\noise.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\shadow.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\light.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\light.frag">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

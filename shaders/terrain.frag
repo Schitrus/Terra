@@ -6,15 +6,19 @@ out vec4 out_color;
 
 in vec2 fragUV;
 
-in vec3 normal;
+in vec3 normal_vector;
 
 in float h;
 
-in vec3 fragPos;
+in vec3 fragment_position;
+
+in vec4 shadowMapCoord;
 
 uniform vec3 light_position;
 
 uniform vec3 view_position;
+
+layout(binding = 1) uniform sampler2DShadow shadow;
 
 const vec3 grass_color = vec3(0.0f, 0.7f, 0.2f);
 const float grass_reflectivity = 0.005f;
@@ -37,7 +41,7 @@ const float snow_shininess = 256.0f;
 const vec3 light_color = vec3(1.0f, 1.0f, 1.0f);
 const float light_intensity = 350000000.0f;
 
-const vec3 irradience_color = vec3(0.5f, 0.7f, 1.0f);
+uniform vec3 irradience_color;// = vec3(0.5f, 0.7f, 1.0f);
 const float irradience_intensity = 0.75f;
 
 // Fresnel term
@@ -59,24 +63,24 @@ float BRDF(float f, float d, float g, vec3 n, vec3 wi, vec3 wo){
 	return f * d * g / (4 * dot(n, wo) * dot(n, wi));
 }
 
-vec3 directIllumination(vec3 wo, vec3 wi){
+vec3 calcDirectIllumination(vec3 wo, vec3 wi){
 
-	vec3 n = normalize(normal);
+	vec3 n = normalize(normal_vector);
 
 	if(dot(n, wi) <= 0.0)
 		return vec3(0.0f);
 
 	vec3 wh = normalize(wi + wo);
 
-	float dist = distance(light_position, fragPos);
+	float dist = distance(light_position, fragment_position);
 
 	vec3 Li = light_intensity * light_color * 1.0/(dist*dist);
 	
-	vec3 object_color = mix(mix(grass_color, rock_color, clamp(1-normal.y, 0.0f, 1.0f)), snow_color, clamp(2*h, 0.0f, 1.0f));
-	float object_fresnel = mix(mix(grass_fresnel, rock_fresnel, clamp(1-normal.y, 0.0f, 1.0f)), snow_fresnel, clamp(2*h, 0.0f, 1.0f));
-	float object_shininess = mix(mix(grass_shininess, rock_shininess, clamp(1-normal.y, 0.0f, 1.0f)), snow_shininess, clamp(2*h, 0.0f, 1.0f));
-	float object_metalness = mix(mix(grass_metalness, rock_metalness, clamp(1-normal.y, 0.0f, 1.0f)), snow_metalness, clamp(2*h, 0.0f, 1.0f));
-	float object_reflectivity = mix(mix(grass_reflectivity, rock_reflectivity, clamp(1-normal.y, 0.0f, 1.0f)), snow_reflectivity, clamp(2*h, 0.0f, 1.0f));
+	vec3 object_color = mix(mix(grass_color, rock_color, clamp(n.y, 0.0f, 1.0f)), snow_color, clamp(2*h, 0.0f, 1.0f));
+	float object_fresnel = mix(mix(grass_fresnel, rock_fresnel, clamp(n.y, 0.0f, 1.0f)), snow_fresnel, clamp(2*h, 0.0f, 1.0f));
+	float object_shininess = mix(mix(grass_shininess, rock_shininess, clamp(n.y, 0.0f, 1.0f)), snow_shininess, clamp(2*h, 0.0f, 1.0f));
+	float object_metalness = mix(mix(grass_metalness, rock_metalness, clamp(n.y, 0.0f, 1.0f)), snow_metalness, clamp(2*h, 0.0f, 1.0f));
+	float object_reflectivity = mix(mix(grass_reflectivity, rock_reflectivity, clamp(n.y, 0.0f, 1.0f)), snow_reflectivity, clamp(2*h, 0.0f, 1.0f));
 
 	float f = F(object_fresnel, wi, wh);
 	float d = D(object_shininess, n, wh);
@@ -99,17 +103,17 @@ vec3 directIllumination(vec3 wo, vec3 wi){
 	return mix(diffuse_term, microfacet_term, object_reflectivity);
 }
 
-vec3 indirectIllumination(vec3 wo, vec3 wi){
+vec3 calcIndirectIllumination(vec3 wo, vec3 wi){
 
-	vec3 n = normalize(normal);
+	vec3 n = normalize(normal_vector);
 	
 	wi = vec3(normalize(reflect(-wo, n)));
 
-	vec3 object_color = mix(mix(grass_color, rock_color, clamp(1-normal.y, 0.0f, 1.0f)), snow_color, clamp(2*h, 0.0f, 1.0f));
-	float object_fresnel = mix(mix(grass_fresnel, rock_fresnel, clamp(1-normal.y, 0.0f, 1.0f)), snow_fresnel, clamp(2*h, 0.0f, 1.0f));
-	float object_shininess = mix(mix(grass_shininess, rock_shininess, clamp(1-normal.y, 0.0f, 1.0f)), snow_shininess, clamp(2*h, 0.0f, 1.0f));
-	float object_metalness = mix(mix(grass_metalness, rock_metalness, clamp(1-normal.y, 0.0f, 1.0f)), snow_metalness, clamp(2*h, 0.0f, 1.0f));
-	float object_reflectivity = mix(mix(grass_reflectivity, rock_reflectivity, clamp(1-normal.y, 0.0f, 1.0f)), snow_reflectivity, clamp(2*h, 0.0f, 1.0f));
+	vec3 object_color = mix(mix(grass_color, rock_color, clamp(n.y, 0.0f, 1.0f)), snow_color, clamp(2*h, 0.0f, 1.0f));
+	float object_fresnel = mix(mix(grass_fresnel, rock_fresnel, clamp(n.y, 0.0f, 1.0f)), snow_fresnel, clamp(2*h, 0.0f, 1.0f));
+	float object_shininess = mix(mix(grass_shininess, rock_shininess, clamp(n.y, 0.0f, 1.0f)), snow_shininess, clamp(2*h, 0.0f, 1.0f));
+	float object_metalness = mix(mix(grass_metalness, rock_metalness, clamp(n.y, 0.0f, 1.0f)), snow_metalness, clamp(2*h, 0.0f, 1.0f));
+	float object_reflectivity = mix(mix(grass_reflectivity, rock_reflectivity, clamp(n.y, 0.0f, 1.0f)), snow_reflectivity, clamp(2*h, 0.0f, 1.0f));
 	
 	vec3 Li = irradience_intensity * irradience_color;
 
@@ -130,15 +134,25 @@ vec3 indirectIllumination(vec3 wo, vec3 wi){
 
 void main(){
 
-	vec3 light_dir = -normalize(light_position - fragPos);
+	vec3 light_direction = normalize(fragment_position - light_position);
+	vec3 view_direction = -normalize(fragment_position - view_position);
 
-	vec3 view_dir = -normalize(view_position - fragPos);
+	vec3 direct_illumination = vec3(0.0f);
+	vec3 indirect_illumination = vec3(0.0f);
 
-	vec3 wo = view_dir;
-	vec3 wi = -light_dir;
+	float visibility = textureProj(shadow, shadowMapCoord);
+
+	if(light_position.y <= 0.0f)
+		visibility = clamp(visibility + light_position.y/500.0f, 0.0f, 1.0f);
+
+	direct_illumination = visibility * calcDirectIllumination(view_direction, -light_direction);	
+
+	indirect_illumination = calcIndirectIllumination(view_direction, -light_direction);
 	
-	vec3 color = directIllumination(wo, wi) + indirectIllumination(wo, wi);
+	vec3 color = direct_illumination + indirect_illumination;
 
 	out_color = vec4(color, 1.0f);
+
+	//out_color = vec4(vec3(visibility), 1.0f);
 	
 }

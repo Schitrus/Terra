@@ -6,6 +6,8 @@ uniform float freq;
 
 uniform vec2 offset;
 
+uniform float size;
+
 layout(binding = 0)uniform sampler2D noise;
 
 layout(binding = 1)uniform sampler1D gradient;
@@ -29,7 +31,7 @@ float fade(float x){
 
 void main(){
 
-	vec2 pos = freq * (UV + vec2(-0.5) + offset);
+	vec2 pos = freq * ((1.0f + 2.0f/size) * (UV + vec2(-0.5)) + offset);
 	vec2 in_pos = fract(abs(pos));
 	in_pos.x = pos.x >= 0 ? in_pos.x : 1 - in_pos.x;
 	in_pos.y = pos.y >= 0 ? in_pos.y : 1 - in_pos.y;
@@ -48,9 +50,9 @@ void main(){
 	float d0, d1, d2 ,d3;
 
 	d0 = dot(g0, in_pos);
-	d1 = dot(g1, in_pos-dx);
-	d2 = dot(g2, in_pos-dy);
-	d3 = dot(g3, in_pos-dx-dy);
+	d1 = dot(g1, in_pos-vec2(dx));
+	d2 = dot(g2, in_pos-vec2(dy));
+	d3 = dot(g3, in_pos-vec2(dx)-vec2(dy));
 
 	float x0, x1, y0;
 
