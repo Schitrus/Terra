@@ -100,10 +100,15 @@ unsigned int cube_indices[] = { 1, 2, 3, 2, 1, 0,  4, 5, 6, 7, 6, 5,
 
 Shader terrain_shader;
 Shader noise_shader;
+Shader noise3d_shader;
+Shader biome_shader;
+Shader water_shader;
 Shader shadow_shader;
 Shader light_shader;
 
 unsigned int terrain_length = 64;
+
+unsigned int water_length = 64;
 
 unsigned int shadow_size = 1024*8;
 
@@ -188,9 +193,26 @@ void generateTerrain(GLuint FBO, GLuint VAO, GLuint* terrain_texture, GLuint gra
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	}
+
+	swap(terrain_texture[0], terrain_texture[1]);
+
+	biome_shader.use();
+
+	glBindTexture(GL_TEXTURE_2D, terrain_texture[0]);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, terrain_texture[0], 0);
+
+	glUniform1f(glGetUniformLocation(biome_shader.getProgram(), "size"), terrain_length);
+	glUniform2fv(glGetUniformLocation(biome_shader.getProgram(), "offset"), 1, &offset[0]);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, terrain_texture[1]);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 }
 
-void drawShadow(GLuint FBO, GLuint shadow_FBO, GLuint quad_VAO, GLuint terrain_VAO, GLuint* terrain_texture, GLuint gradient_texture, GLuint shadow_texture, vec2 pospos, ivec2 seed, mat4 MVP, float res) {
+void drawShadow(GLuint FBO, GLuint shadow_FBO, GLuint quad_VAO, GLuint terrain_VAO, GLuint* terrain_texture, GLuint gradient_texture, GLuint shadow_texture, vec2 pospos, ivec2 seed, mat4 model, mat4 MVP, float res) {
 	
 	generateTerrain(FBO, quad_VAO, terrain_texture, gradient_texture, pospos, seed);
 
@@ -205,6 +227,7 @@ void drawShadow(GLuint FBO, GLuint shadow_FBO, GLuint quad_VAO, GLuint terrain_V
 	shadow_shader.use();
 
 	glUniformMatrix4fv(glGetUniformLocation(shadow_shader.getProgram(), "MVP"), 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(shadow_shader.getProgram(), "model"), 1, GL_FALSE, &model[0][0]);
 	glUniform1f(glGetUniformLocation(shadow_shader.getProgram(), "res"), res);
 
 	glBindVertexArray(terrain_VAO);
@@ -217,7 +240,7 @@ void drawShadow(GLuint FBO, GLuint shadow_FBO, GLuint quad_VAO, GLuint terrain_V
 	glBindVertexArray(0);
 }
 
-void drawTerrain(GLuint FBO, GLuint quad_VAO, GLuint terrain_VAO, GLuint* terrain_texture, GLuint gradient_texture, GLuint shadow_texture, vec2 pospos, ivec2 seed, mat4 MVP, mat4 modelViewMatrix, mat4 lightMatrix, vec3 light_position, vec3 view_position, float res) {
+void drawTerrain(GLuint FBO, GLuint quad_VAO, GLuint terrain_VAO, GLuint* terrain_texture, GLuint gradient_texture, GLuint shadow_texture, vec2 pospos, ivec2 seed, mat4 model, mat4 MVP, mat4 modelViewMatrix, mat4 lightMatrix, vec3 light_position, vec3 view_position, vec3 light_color, float res) {
 
 	generateTerrain(FBO, quad_VAO, terrain_texture, gradient_texture, pospos, seed);
 
@@ -234,10 +257,12 @@ void drawTerrain(GLuint FBO, GLuint quad_VAO, GLuint terrain_VAO, GLuint* terrai
 	terrain_shader.use();
 
 	glUniformMatrix4fv(glGetUniformLocation(terrain_shader.getProgram(), "MVP"), 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(terrain_shader.getProgram(), "model"), 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(terrain_shader.getProgram(), "modelViewMatrix"), 1, GL_FALSE, &modelViewMatrix[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(terrain_shader.getProgram(), "lightMatrix"), 1, GL_FALSE, &lightMatrix[0][0]);
 	glUniform3fv(glGetUniformLocation(terrain_shader.getProgram(), "light_position"), 1, &light_position[0]);
 	glUniform3fv(glGetUniformLocation(terrain_shader.getProgram(), "view_position"), 1, &view_position[0]);
+	glUniform3fv(glGetUniformLocation(terrain_shader.getProgram(), "light_color"), 1, &light_color[0]);
 	glUniform3fv(glGetUniformLocation(terrain_shader.getProgram(), "irradience_color"), 1, &environment_color[0]);
 	glUniform1f(glGetUniformLocation(terrain_shader.getProgram(), "res"), res);
 
@@ -251,6 +276,91 @@ void drawTerrain(GLuint FBO, GLuint quad_VAO, GLuint terrain_VAO, GLuint* terrai
 	glDrawElements(GL_PATCHES, 4, GL_UNSIGNED_INT, 0);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
+
+	glBindVertexArray(0);
+}
+
+void generateWater(GLuint FBO, GLuint VAO, GLuint* water_texture, GLuint gradient_texture, vec3 offset, ivec3 seed) {
+	// GENERATE WATER
+
+	glViewport(0, 0, water_length + 2, water_length + 2);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	noise3d_shader.use();
+
+	glUniform3iv(glGetUniformLocation(noise3d_shader.getProgram(), "seed"), 1, &seed[0]);
+	glUniform1f(glGetUniformLocation(noise3d_shader.getProgram(), "size"), water_length);
+
+	glBindVertexArray(VAO);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	for (int i = 4; i < 6; i++) {
+
+		swap(water_texture[0], water_texture[1]);
+
+		glBindTexture(GL_TEXTURE_2D, water_texture[0]);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, water_texture[0], 0);
+
+		glUniform1f(glGetUniformLocation(noise3d_shader.getProgram(), "freq"), pow(2, i));
+		glUniform3fv(glGetUniformLocation(noise3d_shader.getProgram(), "offset"), 1, &offset[0]);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, water_texture[1]);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_1D, gradient_texture);
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	}
+
+}
+
+void drawWater(GLuint FBO, GLuint quad_VAO, GLuint water_VAO, GLuint* water_texture, GLuint gradient_texture, GLuint shadow_texture, vec3 offset, ivec3 seed, mat4 model, mat4 MVP, mat4 modelViewMatrix, mat4 lightMatrix, vec3 light_position, vec3 view_position, vec3 light_color, float res) {
+	generateWater(FBO, quad_VAO, water_texture, gradient_texture, offset, seed);
+
+	// DRAW Water
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glViewport(0, 0, window_width, window_height);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	water_shader.use();
+
+	glUniformMatrix4fv(glGetUniformLocation(water_shader.getProgram(), "MVP"), 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(water_shader.getProgram(), "model"), 1, GL_FALSE, &model[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(water_shader.getProgram(), "modelViewMatrix"), 1, GL_FALSE, &modelViewMatrix[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(water_shader.getProgram(), "lightMatrix"), 1, GL_FALSE, &lightMatrix[0][0]);
+	glUniform3fv(glGetUniformLocation(water_shader.getProgram(), "light_position"), 1, &light_position[0]);
+	glUniform3fv(glGetUniformLocation(water_shader.getProgram(), "view_position"), 1, &view_position[0]);
+	glUniform3fv(glGetUniformLocation(water_shader.getProgram(), "light_color"), 1, &light_color[0]);
+	glUniform3fv(glGetUniformLocation(water_shader.getProgram(), "irradience_color"), 1, &environment_color[0]);
+	glUniform1f(glGetUniformLocation(water_shader.getProgram(), "res"), res);
+
+	glBindVertexArray(water_VAO);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, water_texture[0]);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, shadow_texture);
+
+	glDrawElements(GL_PATCHES, 4, GL_UNSIGNED_INT, 0);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
+
+	glDisable(GL_BLEND);
 
 	glBindVertexArray(0);
 }
@@ -317,6 +427,12 @@ int main(int argc, char** argv) {
 	terrain_shader.load("terrain.vert", "terrain.tesc", "terrain.tese", "terrain.frag");
 	
 	noise_shader.load("noise.vert", "noise.frag");
+
+	noise3d_shader.load("noise.vert", "3dnoise.frag");
+
+	water_shader.load("terrain.vert", "terrain.tesc", "terrain.tese", "water.frag");
+
+	biome_shader.load("noise.vert", "biome.frag");
 
 	shadow_shader.load("terrain.vert", "terrain.tesc", "terrain.tese", "shadow.frag");
 
@@ -392,6 +508,7 @@ int main(int argc, char** argv) {
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
+	// Terrain Texture
 	GLuint terrain_texture[2];
 	glGenTextures(2, terrain_texture);
 	glBindTexture(GL_TEXTURE_2D, terrain_texture[0]);
@@ -415,6 +532,31 @@ int main(int argc, char** argv) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, terrain_length + 2, terrain_length + 2, 0, GL_RED, GL_FLOAT, nullptr);
+
+	// Water Texture
+	GLuint water_texture[2];
+	glGenTextures(2, water_texture);
+	glBindTexture(GL_TEXTURE_2D, water_texture[0]);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, water_length + 2, water_length + 2, 0, GL_RED, GL_FLOAT, nullptr);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, water_texture[0], 0);
+
+	glBindTexture(GL_TEXTURE_2D, water_texture[1]);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, water_length + 2, water_length + 2, 0, GL_RED, GL_FLOAT, nullptr);
 
 	// Shadow FrameBuffer
 
@@ -444,6 +586,8 @@ int main(int argc, char** argv) {
 
 	////////////////////////
 
+	//2D Gradient Texture
+
 	GLuint gradient_texture;
 	glGenTextures(1, &gradient_texture);
 	glBindTexture(GL_TEXTURE_2D, gradient_texture);
@@ -470,6 +614,29 @@ int main(int argc, char** argv) {
 
 	glTexImage1D(GL_TEXTURE_1D, 0, GL_RG32F, gradient_length, 0, GL_RG, GL_FLOAT, gradients);
 
+	//3D Gradient Texture
+
+	GLuint gradient3d_texture;
+	glGenTextures(1, &gradient3d_texture);
+	glBindTexture(GL_TEXTURE_2D, gradient3d_texture);
+
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	GLuint gradient3d_length = 1024;
+	vec3* gradients3d = new vec3[gradient3d_length];
+
+	for (int i = 0; i < gradient3d_length; i++) {
+		float a1 = rand() % 360 / 180.0f * PI;
+		float a2 = rand() % 360 / 180.0f * PI;
+		float a3 = rand() % 360 / 180.0f * PI;
+		gradients3d[i] = normalize(vec3(sin(a1) * sin(a2) * a3 + cos(a1) * a2, cos(a1) * sin(a2) * a3 - sin(a1) * a2, cos(a2) * a3 + a1));
+	}
+
+	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB32F, gradient3d_length, 0, GL_RGB, GL_FLOAT, gradients3d);
 
 	Audio* music = new Audio();
 	music->init();
@@ -500,13 +667,13 @@ int main(int argc, char** argv) {
 			music->restart();
 
 		// Day cycle time in seconds
-		float day_cycle_time = 10.0f;
+		float day_cycle_time = 120.0f;
 		float season_cycle_time = day_cycle_time * 6 * 4;
 
 
 		float world_longitude = 0.0f;
 		float world_latitude = 0.0f;
-		float world_tilt = 0.0f;
+		float world_tilt = 25.0f;
 
 		mat4 light_dayRotation = rotate((float)radians(360.0f * glfwGetTime() / day_cycle_time + world_longitude), vec3(0.0f, 1.0f, 0.0f));
 
@@ -522,29 +689,60 @@ int main(int argc, char** argv) {
 
 		std::cout << "Time: " << cycle_time_inH << endl;
 
+		vec3 morning_color = vec3(0.15f, 0.3f, 0.7f);
+		vec3 dawn_color = vec3(0.85f, 0.45f, 0.65f);
+		vec3 forenoon_color = vec3(0.0f, 0.5f, 1.0f);
+		vec3 day_color = vec3(0.5f, 0.7f, 1.0f);
+		vec3 afternoon_color = vec3(0.0f, 0.5f, 1.0f);
+		vec3 dusk_color = vec3(0.85f, 0.45f, 0.65f);
+		vec3 evening_color = vec3(0.15f, 0.3f, 0.7f);
+		vec3 night_color = vec3(0.05f, 0.05f, 0.25f);
+		
+		vec3 light_dawn = vec3(1.0f, 0.5f, 0.0f);
+		vec3 light_forenoon = vec3(1.0f, 1.0f, 0.5f);
+		vec3 light_noon = vec3(1.0f, 1.0f, 1.0f);
+		vec3 light_afternoon = vec3(1.0f, 1.0f, 0.5f);
+		vec3 light_dusk = vec3(1.0f, 0.5f, 0.0f);
+
+		vec3 light_color;
+
+		if (cycle_time_inH < 6)
+			light_color = light_dawn;
+		else if (cycle_time_inH < 8)
+			light_color = mix(light_dawn, light_forenoon, (cycle_time_inH - 6) / 2);
+		else if (cycle_time_inH < 11)
+			light_color = mix(light_forenoon, light_noon, (cycle_time_inH - 8) / 3);
+		else if (cycle_time_inH < 13)
+			light_color = light_noon;
+		else if (cycle_time_inH < 16)
+			light_color = mix(light_noon, light_afternoon, (cycle_time_inH - 13) / 3);
+		else if (cycle_time_inH < 18)
+			light_color = mix(light_afternoon, light_dusk, (cycle_time_inH - 16) / 2);
+		else
+			light_color = light_dusk;
 
 		if (cycle_time_inH < 1)
-			environment_color = vec3(0.1f, 0.1f, 0.25f);
+			environment_color = night_color;
 		else if (cycle_time_inH < 4)
-			environment_color = mix(vec3(0.1f, 0.1f, 0.25f), vec3(0.25f, 0.5f, 1.0f), (cycle_time_inH - 1) / 3);
+			environment_color = mix(night_color, morning_color, (cycle_time_inH - 1) / 3);
 		else if (cycle_time_inH < 6)
-			environment_color = mix(vec3(0.25f, 0.5f, 1.0f), vec3(1.0f, 0.5f, 0.25f), (cycle_time_inH - 4) / 2);
+			environment_color = mix(morning_color, dawn_color, (cycle_time_inH - 4) / 2);
 		else if (cycle_time_inH < 8)
-			environment_color = mix(vec3(1.0f, 0.5f, 0.25f), vec3(0.5f, 0.7f, 1.0f), (cycle_time_inH - 6) / 2);
+			environment_color = mix(dawn_color, forenoon_color, (cycle_time_inH - 6) / 2);
 		else if (cycle_time_inH < 11)
-			environment_color = mix(vec3(0.5f, 0.7f, 1.0f), vec3(0.7f, 0.8f, 1.0f), (cycle_time_inH - 8) / 3);
+			environment_color = mix(forenoon_color, day_color, (cycle_time_inH - 8) / 3);
 		else if (cycle_time_inH < 13)
-			environment_color = vec3(0.7f, 0.8f, 1.0f);
+			environment_color = day_color;
 		else if (cycle_time_inH < 16)
-			environment_color = mix(vec3(0.7f, 0.8f, 1.0f), vec3(0.5f, 0.7f, 1.0f), (cycle_time_inH - 13) / 3);
+			environment_color = mix(day_color, afternoon_color, (cycle_time_inH - 13) / 3);
 		else if (cycle_time_inH < 18)
-			environment_color = mix(vec3(0.5f, 0.7f, 1.0f), vec3(1.0f, 0.5f, 0.25f), (cycle_time_inH - 16) / 2);
+			environment_color = mix(afternoon_color, dusk_color, (cycle_time_inH - 16) / 2);
 		else if (cycle_time_inH < 20)
-			environment_color = mix(vec3(1.0f, 0.5f, 0.25f), vec3(0.25f, 0.5f, 1.0f), (cycle_time_inH - 18) / 2);
+			environment_color = mix(dusk_color, evening_color, (cycle_time_inH - 18) / 2);
 		else if (cycle_time_inH < 23)
-			environment_color = mix(vec3(0.25f, 0.5f, 1.0f), vec3(0.1f, 0.1f, 0.25f), (cycle_time_inH - 20) / 3);
+			environment_color = mix(evening_color, night_color, (cycle_time_inH - 20) / 3);
 		else
-			environment_color = vec3(0.1f, 0.1f, 0.25f);
+			environment_color = night_color;
 
 		mat4 roty = rotate(mat4(1.0f), (float)-cursorPositionX, vec3(0.0f, 1.0f, 0.0f));
 
@@ -591,7 +789,7 @@ int main(int argc, char** argv) {
 		view_dir = vec3(roty * rotx * vec4(view_dir, 0.0f));
 
 		mat4 model(1.0f);
-		mat4 view = camera.getView();//lookAt(pos, pos + view_dir, vec3(0, 1, 0));
+		mat4 view = camera.getView(vec3(0.0f, position.y, 0.0f));//lookAt(pos, pos + view_dir, vec3(0, 1, 0));
 		mat4 proj = camera.getProjection();//perspective(radians(90.0f), (float)window_width / window_height, 0.01f, 100.0f);
 
 		mat4 light_view = lookAt(light_position, vec3(0.0f, 0.0f, 0.0f), vec3(0, 1, 0));
@@ -615,11 +813,11 @@ int main(int argc, char** argv) {
 
 				model = translate(mat4(1.0f), vec3(j * -2.0f, 0.0f, i * -2.0f));
 
-				vec2 terrainPosition = -vec2(j, i);
+				vec2 terrainPosition = vec2(position.x, position.z) - vec2(j, i);
 
 				mat4 MVP = light_proj * light_view * model;
 
-				drawShadow(FBO, depth_FBO, quad_VAO, terrain_VAO, terrain_texture, gradient_texture, shadow_texture, terrainPosition, seed, MVP, tesselationResolution);
+				drawShadow(FBO, depth_FBO, quad_VAO, terrain_VAO, terrain_texture, gradient_texture, shadow_texture, terrainPosition, seed, model, MVP, tesselationResolution);
 
 			}
 		}
@@ -641,7 +839,7 @@ int main(int argc, char** argv) {
 
 				model = translate(mat4(1.0f), vec3(j * -2.0f, 0.0f, i * -2.0f));// *scale(mat4(1.0f), vec3(1.001f));
 
-				vec2 terrainPosition = -vec2(j, i);
+				vec2 terrainPosition = vec2(position.x, position.z) - vec2(j, i);
 
 				mat4 MVP = proj * view * model;
 
@@ -649,14 +847,35 @@ int main(int argc, char** argv) {
 
 				mat4 lightMatrix = translate(mat4(1.0f), vec3(0.5f)) * scale(mat4(1.0f), vec3(0.5f)) * light_proj * light_view * inverse(view);
 
-				drawTerrain(FBO, quad_VAO, terrain_VAO, terrain_texture, gradient_texture, shadow_texture, terrainPosition, seed, MVP, modelViewMatrix, lightMatrix, light_position, position, tesselationResolution);
+				drawTerrain(FBO, quad_VAO, terrain_VAO, terrain_texture, gradient_texture, shadow_texture, terrainPosition, seed, model, MVP, modelViewMatrix, lightMatrix, light_position, vec3(0.0f, position.y, 0.0f), light_color, tesselationResolution);
 
 			}
 		}
 
+
+		// Draw water
+		for (int j = -5; j <= 5; j++) {
+			for (int i = -5; i <= 5; i++) {
+
+				model = translate(mat4(1.0f), vec3(j * -2.0f, -0.55f, i * -2.0f));// *scale(mat4(1.0f), vec3(1.001f));
+
+				vec3 terrainPosition = vec3(position.x, glfwGetTime()*0.05, position.z) - vec3(j, 0.0f, i);
+
+				mat4 MVP = proj * view * model;
+
+				mat4 modelViewMatrix = view * model;
+
+				mat4 lightMatrix = translate(mat4(1.0f), vec3(0.5f)) * scale(mat4(1.0f), vec3(0.5f)) * light_proj * light_view * inverse(view);
+
+				drawWater(FBO, quad_VAO, terrain_VAO, terrain_texture, gradient_texture, shadow_texture, terrainPosition, vec3(0.0f, 0.0f, 0.0f), model, MVP, modelViewMatrix, lightMatrix, light_position, vec3(0.0f, position.y, 0.0f), light_color, tesselationResolution);
+
+			}
+		}
+
+		// Draw Light
 		mat4 cube_proj = perspective(radians(90.0f), (float)window_width / window_height, 5000.0f, 50000.0f);
 
-		drawLight(cube_VAO, cube_proj * view * light_transform * scale(vec3(1000.0f, 1000.0f, 1000.0f)), vec3(1.0f, 1.0f, 0.5f));
+		drawLight(cube_VAO, cube_proj * view * light_transform * scale(vec3(1000.0f, 1000.0f, 1000.0f)), light_color);
 
 		//std::cout << "Hello: " << cursorPositionX << ", " << cursorPositionY << std::endl;
 

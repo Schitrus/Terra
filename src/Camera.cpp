@@ -6,6 +6,10 @@ Camera::Camera()
 }
 
 mat4 Camera::getView() {
+	return getView(position);
+}
+
+mat4 Camera::getView(vec3 position) {
 	vec3 viewDirection(0.0f, 0.0f, -1.0f);
 	viewDirection = vec3(rotate(mat4(1.0f), (float)pitch, vec3(1.0f, 0.0f, 0.0f)) * vec4(viewDirection, 0.0f));
 	viewDirection = vec3(rotate(mat4(1.0f), (float)yaw,   vec3(0.0f, 1.0f, 0.0f)) * vec4(viewDirection, 0.0f));

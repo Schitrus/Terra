@@ -82,11 +82,11 @@ vec3 calcDirectIllumination(vec3 wo, vec3 wi){
 
 	vec3 Li = light_intensity * light_color * 1.0/(dist*dist);
 	
-	vec3 object_color         = mix(mix(mix(grass_color, rock_color, clamp(n.y, 0.0f, 1.0f)), snow_color, clamp(2*h, 0.0f, 1.0f)), water_color, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_fresnel      = mix(mix(mix(grass_fresnel, rock_fresnel, clamp(n.y, 0.0f, 1.0f)), snow_fresnel, clamp(2*h, 0.0f, 1.0f)), water_fresnel, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_shininess    = mix(mix(mix(grass_shininess, rock_shininess, clamp(n.y, 0.0f, 1.0f)), snow_shininess, clamp(2*h, 0.0f, 1.0f)), water_shininess, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_metalness    = mix(mix(mix(grass_metalness, rock_metalness, clamp(n.y, 0.0f, 1.0f)), snow_metalness, clamp(2*h, 0.0f, 1.0f)), water_metalness, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_reflectivity = mix(mix(mix(grass_reflectivity, rock_reflectivity, clamp(n.y, 0.0f, 1.0f)), snow_reflectivity, clamp(2*h, 0.0f, 1.0f)), water_reflectivity, clamp(8*-h-4, 0.0f, 1.0f));
+	vec3 object_color         = water_color;
+	float object_fresnel      = water_fresnel;
+	float object_shininess    = water_shininess;
+	float object_metalness    = water_metalness;
+	float object_reflectivity = water_reflectivity;
 
 	float f = F(object_fresnel, wi, wh);
 	float d = D(object_shininess, n, wh);
@@ -115,11 +115,11 @@ vec3 calcIndirectIllumination(vec3 wo, vec3 wi){
 	
 	wi = vec3(normalize(reflect(-wo, n)));
 
-	vec3 object_color         = mix(mix(mix(grass_color, rock_color, clamp(n.y, 0.0f, 1.0f)), snow_color, clamp(2*h, 0.0f, 1.0f)), water_color, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_fresnel      = mix(mix(mix(grass_fresnel, rock_fresnel, clamp(n.y, 0.0f, 1.0f)), snow_fresnel, clamp(2*h, 0.0f, 1.0f)), water_fresnel, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_shininess    = mix(mix(mix(grass_shininess, rock_shininess, clamp(n.y, 0.0f, 1.0f)), snow_shininess, clamp(2*h, 0.0f, 1.0f)), water_shininess, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_metalness    = mix(mix(mix(grass_metalness, rock_metalness, clamp(n.y, 0.0f, 1.0f)), snow_metalness, clamp(2*h, 0.0f, 1.0f)), water_metalness, clamp(8*-h-4, 0.0f, 1.0f));
-	float object_reflectivity = mix(mix(mix(grass_reflectivity, rock_reflectivity, clamp(n.y, 0.0f, 1.0f)), snow_reflectivity, clamp(2*h, 0.0f, 1.0f)), water_reflectivity, clamp(8*-h-4, 0.0f, 1.0f));
+	vec3 object_color         = water_color;
+	float object_fresnel      = water_fresnel;
+	float object_shininess    = water_shininess;
+	float object_metalness    = water_metalness;
+	float object_reflectivity = water_reflectivity;
 	
 	vec3 Li = irradience_intensity * irradience_color;
 
@@ -157,7 +157,7 @@ void main(){
 	
 	vec3 color = direct_illumination + indirect_illumination;
 
-	out_color = vec4(color, 1.0f);
+	out_color = vec4(color, 0.75f);
 
 	//out_color = vec4(vec3(visibility), 1.0f);
 	

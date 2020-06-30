@@ -23,6 +23,7 @@ public:
 	Camera();
 
 	mat4 getView();
+	mat4 getView(vec3 position);
 
 	mat4 getProjection();
 

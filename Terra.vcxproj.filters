@@ -76,5 +76,14 @@
     <None Include="shaders\light.frag">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shaders\biome.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\3dnoise.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\water.frag">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

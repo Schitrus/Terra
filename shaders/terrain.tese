@@ -4,6 +4,8 @@ layout (quads, fractional_odd_spacing, cw) in;
 
 uniform mat4 MVP;
 
+uniform mat4 model;
+
 uniform float res;
 
 uniform mat4 modelViewMatrix;
@@ -64,7 +66,7 @@ void main(){
 
 	pos = vec4(pos.x, height, pos.z, 1.0f);
 
-	fragment_position = vec3(pos);
+	fragment_position = vec3(model * pos);
 
 	shadowMapCoord = lightMatrix * modelViewMatrix * pos;
 
