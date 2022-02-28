@@ -1,2 +1,2 @@
 # Terra
-This is a project for the (DAT205 / DIT227) Advanced Algorithms course on Chalmers / GU
+This is a project for the (DAT205 / DIT227) Advanced Computer Graphics course on Chalmers / GU
